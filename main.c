@@ -14,12 +14,14 @@ int append_string(char ***argv, char *string, int *size)
 
 int create_args_from_line(char *string, char ***argv, char split)
 {
-	int count = 0;
+	int count = 0, app_encountered = 0;
 	//pointer to the start of the word
 	char *start = string;
 	while (*string!='\0')
         {
-                if (*string == split || *string == '\n')
+                if (*string == '"' || *string == '\'')
+                        app_encountered = (app_encountered+1)%2;
+                else if ((*string == split || *string == '\n') && app_encountered==0)
                 {
                         *string='\0';
 			append_string(argv, start, &count);
